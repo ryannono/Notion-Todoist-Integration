@@ -43,6 +43,8 @@ https://user-images.githubusercontent.com/79291357/204050706-d78fc3be-d79a-4c08-
     To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
 
 
+https://user-images.githubusercontent.com/79291357/204051053-7ba2c181-459f-4a9e-8e43-38aacc6656f8.mp4
+
 
     *Note: In both cases after the task is updated the indicator will revert to reflect the task being up to date (in Notion the sync status will show as "Updated" after the update is made and in Todoist the "Priority 3" tag will be removed after the sync is done)
 
