@@ -14,7 +14,10 @@ Todoist is simple yet effective and when it comes to creating task and completin
 
 This Integration takes Notion which people love and syncs it (a database you create for task purposes) with Todoist, this way you can use the todoist mobile app (or desktop both are supported) to jot down and create quick tasks on the go while being certain all the vital information will also be store and able to be accessed via Notion.
 
+https://user-images.githubusercontent.com/79291357/204050623-696a8c9d-6263-47e4-91a2-e73c6075c1ee.mp4
+
 Note: The opposite is also true you can create pages in Notion and have them show up seamlessly in Todoist.
+
 
 
 Here's a list of currently supported features:
