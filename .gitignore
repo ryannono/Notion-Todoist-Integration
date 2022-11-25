@@ -1,0 +1,8 @@
+# various keys
+.env
+
+#ds store
+.DS_STORE
+
+# vs code files
+.vscode
