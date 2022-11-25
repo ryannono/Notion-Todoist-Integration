@@ -40,7 +40,7 @@ function objectToMap(object: any): Map<any,any>{
 
 // bubbleSortTaskList sorts a notion page object
 // array by the time tasks were created 
-function bubbleSortTaskList(taskList: Array<PageObjectResponse>){
+function bubbleSortTaskList(taskList: Array<PageObjectResponse>) : void{
 
     let swapCounter:number = -1;
 
@@ -89,7 +89,7 @@ function getNotionDueProperty(pageObject: PageObjectResponse) : string {
     let propertiesObject = pageObject.properties as object;
     let map = objectToMap(propertiesObject);
     let dateObject = map.get("Due").date as object;
-    if (dateObject === null) {
+    if (!dateObject) {
         return "";
     }
     let date = objectToMap(dateObject).get("start");
@@ -771,7 +771,6 @@ async function todoistManualUpdates() : Promise<void> {
 // will be checked and synced
 async function intervalStart(){
 
-    let minute:number = 60 * 1000;
     let latestNotionIndex: number = -1;
     let latestTodoistIndex: number = -1;
 

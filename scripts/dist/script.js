@@ -57,7 +57,7 @@ function getNotionDueProperty(pageObject) {
     let propertiesObject = pageObject.properties;
     let map = objectToMap(propertiesObject);
     let dateObject = map.get("Due").date;
-    if (dateObject === null) {
+    if (!dateObject) {
         return "";
     }
     let date = objectToMap(dateObject).get("start");
@@ -521,7 +521,6 @@ function todoistManualUpdates() {
 }
 function intervalStart() {
     return __awaiter(this, void 0, void 0, function* () {
-        let minute = 60 * 1000;
         let latestNotionIndex = -1;
         let latestTodoistIndex = -1;
         setInterval(() => {
