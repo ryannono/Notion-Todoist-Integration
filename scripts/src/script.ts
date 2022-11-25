@@ -38,6 +38,35 @@ function objectToMap(object: any): Map<any,any>{
     return map;
 }
 
+// bubbleSortTaskList sorts a notion page object
+// array by the time tasks were created 
+function bubbleSortTaskList(taskList: Array<PageObjectResponse>){
+
+    let swapCounter:number = -1;
+
+    while (swapCounter != 0){
+
+        swapCounter = 0;
+
+        for (let i = 0; i+1 < taskList.length; i++) {
+            
+            let currentTask:PageObjectResponse = taskList[i]
+            let nextTask: PageObjectResponse = taskList[i+1]
+            let currentTaskCreationTime:string = currentTask.created_time;
+            let nextTaskCreationTime:string = nextTask.created_time;
+
+            if (currentTaskCreationTime > nextTaskCreationTime) {
+                
+                taskList[i] = nextTask;
+                taskList[i+1] = currentTask;
+
+                swapCounter++;
+            }
+            
+        }
+    }
+}
+
 
 // ------------ Get Notion Property functions ----------------- //
 
@@ -81,7 +110,7 @@ function getNotionStatusProperty(pageObject: PageObjectResponse): boolean{
 function getNotionTodoistIDProperty(pageObject: PageObjectResponse) : string {
     let propertiesObject = pageObject.properties as object;
     let map = objectToMap(propertiesObject);
-    let number = map.get("TodoistID").number as object;
+    let number = map.get("TodoistID").number;
     return (!number) ? "" : String(number);
 }
 
@@ -548,7 +577,7 @@ async function checkNotionIncompletion(taskList:Array<PageObjectResponse>) : Pro
 // the function returns the index of the last element it checked
 async function notionUpToDateCheck(lastCheckedTodoistIndex: number) : Promise<number> {
 
-    console.log(lastCheckedTodoistIndex);
+    //console.log(lastCheckedTodoistIndex);
 
     // get list of todoist *active tasks
     const taskList:Array<Task> = await todoistApi.getTasks();
@@ -597,11 +626,16 @@ async function notionUpToDateCheck(lastCheckedTodoistIndex: number) : Promise<nu
 // notion database once the new task is created.
 // the function returns the index of the last element it checked
 async function todoistUpToDateCheck(lastCheckedNotionIndex: number){
+
+    console.log(lastCheckedNotionIndex);
+
     
     // get notion active pages 
     let taskList = await notionActivePages() as Array<PageObjectResponse>;
     lastCheckedNotionIndex = await checkNotionCompletion(lastCheckedNotionIndex,taskList);
     let taskListLength = taskList.length;
+
+    bubbleSortTaskList(taskList);// notion query result isn't in order
 
     // if there are any active pages
     if (taskListLength > 0) {
@@ -742,11 +776,13 @@ async function intervalStart(){
     let latestTodoistIndex: number = -1;
 
     // min interval == 5 seconds
-    setInterval( async () => {
-        latestTodoistIndex = await todoistUpToDateCheck(latestTodoistIndex);
-        latestNotionIndex = await notionUpToDateCheck(latestNotionIndex);
-        notionManualUpdates();
-        todoistManualUpdates();
+    setInterval(() => {
+        todoistUpToDateCheck(latestTodoistIndex)
+            .then((value) => latestTodoistIndex = value)
+            .then(notionManualUpdates);
+        notionUpToDateCheck(latestNotionIndex)
+            .then((value) => latestNotionIndex = value)
+            .then(todoistManualUpdates);
     }, 10000);
 }
 

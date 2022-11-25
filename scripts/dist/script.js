@@ -26,6 +26,23 @@ function objectToMap(object) {
     }
     return map;
 }
+function bubbleSortTaskList(taskList) {
+    let swapCounter = -1;
+    while (swapCounter != 0) {
+        swapCounter = 0;
+        for (let i = 0; i + 1 < taskList.length; i++) {
+            let currentTask = taskList[i];
+            let nextTask = taskList[i + 1];
+            let currentTaskCreationTime = currentTask.created_time;
+            let nextTaskCreationTime = nextTask.created_time;
+            if (currentTaskCreationTime > nextTaskCreationTime) {
+                taskList[i] = nextTask;
+                taskList[i + 1] = currentTask;
+                swapCounter++;
+            }
+        }
+    }
+}
 function getNotionDescriptionProperty(pageObject) {
     let propertiesObject = pageObject.properties;
     let map = objectToMap(propertiesObject);
@@ -391,7 +408,6 @@ function checkNotionIncompletion(taskList) {
 }
 function notionUpToDateCheck(lastCheckedTodoistIndex) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(lastCheckedTodoistIndex);
         const taskList = yield todoistApi.getTasks();
         lastCheckedTodoistIndex = yield checkTodoistCompletion(lastCheckedTodoistIndex, taskList);
         let taskListLength = taskList.length;
@@ -419,9 +435,11 @@ function notionUpToDateCheck(lastCheckedTodoistIndex) {
 }
 function todoistUpToDateCheck(lastCheckedNotionIndex) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(lastCheckedNotionIndex);
         let taskList = yield notionActivePages();
         lastCheckedNotionIndex = yield checkNotionCompletion(lastCheckedNotionIndex, taskList);
         let taskListLength = taskList.length;
+        bubbleSortTaskList(taskList);
         if (taskListLength > 0) {
             for (let i = lastCheckedNotionIndex + 1; i < taskListLength; i++) {
                 const notionPage = taskList[i];
@@ -506,12 +524,14 @@ function intervalStart() {
         let minute = 60 * 1000;
         let latestNotionIndex = -1;
         let latestTodoistIndex = -1;
-        setInterval(() => __awaiter(this, void 0, void 0, function* () {
-            latestNotionIndex = yield notionUpToDateCheck(latestNotionIndex);
-            latestTodoistIndex = yield todoistUpToDateCheck(latestTodoistIndex);
-            notionManualUpdates();
-            todoistManualUpdates();
-        }), 10000);
+        setInterval(() => {
+            todoistUpToDateCheck(latestTodoistIndex)
+                .then((value) => latestTodoistIndex = value)
+                .then(notionManualUpdates);
+            notionUpToDateCheck(latestNotionIndex)
+                .then((value) => latestNotionIndex = value)
+                .then(todoistManualUpdates);
+        }, 10000);
     });
 }
 const IDs = {
