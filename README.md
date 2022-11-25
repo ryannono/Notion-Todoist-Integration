@@ -12,7 +12,7 @@ The problem arrises with more granular task, take standard daily tasks for examp
 
 Todoist is simple yet effective and when it comes to creating task and completing task quickly on the go it is much, much better than Notion.
 
-This Integration takes both Notion which people love and syncs a database you create for task purposes with Todoist, this way you can use the todoist mobile app (or desktop both are supported) to jot down and create quick tasks on the go while being certain all the vital information will also be store and able to be accessed via Notion.
+This Integration takes Notion which people love and syncs it (a database you create for task purposes) with Todoist, this way you can use the todoist mobile app (or desktop both are supported) to jot down and create quick tasks on the go while being certain all the vital information will also be store and able to be accessed via Notion.
 
 Note: The opposite is also true you can create pages in Notion and have them show up seamlessly in Todoist.
 
