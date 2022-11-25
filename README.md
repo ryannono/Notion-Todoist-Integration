@@ -20,7 +20,6 @@ Note: The opposite is also true you can create pages in Notion and have them sho
 
 
 
-Here's a list of currently supported features:
 ## Currently supported features:
 
 - 📑 Automated task Creation sync: 
@@ -36,6 +35,10 @@ Here's a list of currently supported features:
 - 🧑‍🏭 Manual sync:
 
     If you've previously created a task on notion but have made changes to it you want to be reflected on the Todoist counterpart just toggle your "Sync Status" from "Updated" to "Needs Update" in your notion database.
+
+
+https://user-images.githubusercontent.com/79291357/204050706-d78fc3be-d79a-4c08-94d4-3768fa68f18e.mp4
+
 
     To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
 
