@@ -40,7 +40,7 @@ Note: The opposite is also true you can create pages in Notion and have them sho
 https://user-images.githubusercontent.com/79291357/204050706-d78fc3be-d79a-4c08-94d4-3768fa68f18e.mp4
 
 
-    To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
+To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
 
 
 https://user-images.githubusercontent.com/79291357/204051053-7ba2c181-459f-4a9e-8e43-38aacc6656f8.mp4
