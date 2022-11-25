@@ -49,7 +49,7 @@ The best way to get the integration is through Railway (https://railway.app/).
 
     1.  First get your notion database set up by having the properties (and those specific property types) shown below.
     
-  ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+  <img width="1104" alt="Screenshot 2022-11-25 at 2 09 48 PM" src="https://user-images.githubusercontent.com/79291357/204044895-3b98dd48-12b9-41fc-8a7f-437c54271476.png">
 
 
     2. Next get the database ID for the database you just configured. (see this link for how https://developers.notion.com/docs/working-with-databases).
@@ -68,12 +68,13 @@ The best way to get the integration is through Railway (https://railway.app/).
 
 
     7. Create a new project and chose the "Deploy from Github repo" option (see below)
-    
-  ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
+  
+  <img width="1440" alt="Screenshot 2022-11-25 at 2 00 57 PM" src="https://user-images.githubusercontent.com/79291357/204044965-a79065c6-a97b-42de-9fee-0d096ead7296.png">
+  
 
     8. Lastly add your keys as variables to the project withthe names used below.
-  ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
+<img width="1440" alt="Screenshot 2022-11-25 at 2 03 52 PM" src="https://user-images.githubusercontent.com/79291357/204044993-5fcf28a3-468e-4e7e-ba27-3d188fe84381.png">
 
 
 
