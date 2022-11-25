@@ -743,8 +743,8 @@ async function intervalStart(){
 
     // min interval == 5 seconds
     setInterval( async () => {
-        latestNotionIndex = await notionUpToDateCheck(latestNotionIndex);
         latestTodoistIndex = await todoistUpToDateCheck(latestTodoistIndex);
+        latestNotionIndex = await notionUpToDateCheck(latestNotionIndex);
         notionManualUpdates();
         todoistManualUpdates();
     }, 10000);
