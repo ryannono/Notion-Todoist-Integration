@@ -41,7 +41,7 @@ https://user-images.githubusercontent.com/79291357/204050706-d78fc3be-d79a-4c08-
 
 
 
-    To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
+To do the same in todoist the "Priority 3" tag has been chosen to be used as a sync button. If you update a task in Todoist you want updated in Notion, just mark the task as "Priority 3".
 
 
 
