@@ -1,4 +1,6 @@
 
+![Frame 3409](https://user-images.githubusercontent.com/79291357/204052549-90682176-f165-43fd-8ae0-a6d6ef1fe77e.png)
+
 # 👋🏾 What is the Notion-Todoist Integration?
 
 I made this Node JS web-service/integration, to help Todoist App users be able to sync their activity cross platform.
