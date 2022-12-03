@@ -250,7 +250,7 @@ async function newNotionPage(todoistTask: Task) : Promise<PageObjectResponse> {
     
     const pageID = newNotionPage.id;
     if (todoistTask.due) {
-        notionApi.pages.update({
+        await notionApi.pages.update({
             page_id: pageID,
             "properties":{
 
@@ -313,7 +313,7 @@ async function updateNotionPage(notionPageID:string, todoistTask: Task) : Promis
 
     const pageID:string = updatedNotionPage.id;
     if (todoistTask.due) {
-        notionApi.pages.update({
+        await notionApi.pages.update({
             page_id: pageID,
             "properties":{
 
@@ -474,7 +474,7 @@ async function checkTodoistCompletion(lastCheckedTodoistIndex:number, taskList:A
             
 
             if (todoistTask.isCompleted){
-                updateNotionPage(IDs.notionPageIDs[i],todoistTask);
+                await updateNotionPage(IDs.notionPageIDs[i],todoistTask);
             }
             
         }
@@ -502,8 +502,8 @@ async function checkTodoistIncompletion(taskList:Array<Task>) : Promise<void> {
             let currentStatus = getNotionStatusProperty(notionPage);
             let index:number = myTodoistIndexOf(todoistTaskID);
 
-            if (currentStatus === true) {
-                updateNotionPage(notionPage.id,todoistTask);
+            if (currentStatus) {
+                await updateNotionPage(notionPage.id,todoistTask);
             }
             IDs.notionPageIDs[index] = notionPage.id;
 
@@ -527,7 +527,7 @@ async function checkNotionCompletion(lastCheckedNotiontIndex:number, taskList:Ar
             if (getNotionStatusProperty(notionPage)){
                 
                 let todoistId: string = getNotionTodoistIDProperty(notionPage);
-                todoistApi.closeTask(todoistId);
+                await todoistApi.closeTask(todoistId);
             }
             
         }
@@ -565,7 +565,7 @@ async function checkNotionIncompletion(taskList:Array<PageObjectResponse>) : Pro
 
             let index:number = myNotionIndexOf(notionPageID);
 
-            todoistApi.reopenTask(todoistID);
+            await todoistApi.reopenTask(todoistID);
             
             IDs.todoistTaskIDs[index] = todoistID;
         }
@@ -656,7 +656,7 @@ async function todoistUpToDateCheck(lastCheckedNotionIndex: number){
                     
                 // update notion task to have todoist id and url
                 let notionPageId = notionPage.id;
-                updateNotionPage(notionPageId,todoistTask);
+                await updateNotionPage(notionPageId,todoistTask);
 
                 // add newly created task id to the structure
                 let index:number = myNotionIndexOf(notionPageId);
@@ -685,7 +685,7 @@ async function todoistUpToDateCheck(lastCheckedNotionIndex: number){
 
 // swapNotionSyncStatus swap the sync status from the passed page 
 async function swapNotionSyncStatus(notionPageID:string) : Promise<void> {
-    notionApi.pages.update({
+    await notionApi.pages.update({
         page_id : notionPageID,
         properties : {
             "Sync status" : {
@@ -716,17 +716,17 @@ async function notionManualUpdates() : Promise<void> {
             let todoistID: string = IDs.todoistTaskIDs[index];
 
             if (!todoistID) {
-                todoistUpToDateCheck(0);
+                await todoistUpToDateCheck(0);
             }
             else{
-                updateTodoistTask(todoistID,notionPage);
+                await updateTodoistTask(todoistID,notionPage);
             }
 
             if (getNotionStatusProperty(notionPage)){
-                todoistApi.closeTask(todoistID);
+                await todoistApi.closeTask(todoistID);
             }
 
-            swapNotionSyncStatus(notionPageID);
+            await swapNotionSyncStatus(notionPageID);
         }
     }
 }
@@ -752,14 +752,14 @@ async function todoistManualUpdates() : Promise<void> {
             const notionPage = await IDSearchNotion(Number(todoistID));
 
             if (!notionPage) {
-                notionUpToDateCheck(0);
+                await notionUpToDateCheck(0);
             }
             else{
-                updateNotionPage(notionPage.id,todoistTask);
+                await updateNotionPage(notionPage.id,todoistTask);
             }
             
             // update task priority bak to level 1
-            todoistApi.updateTask(todoistID,{priority : 1}) 
+            await todoistApi.updateTask(todoistID,{priority : 1}) 
         }
     }
 }
