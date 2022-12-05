@@ -13,7 +13,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node ./scripts/dist/script.js",
+    "start": "node ./scripts/dist/index.js",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
