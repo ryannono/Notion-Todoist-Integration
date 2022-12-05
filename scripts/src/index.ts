@@ -67,12 +67,12 @@ function bubbleSortTaskList(taskList: Array<PageObjectResponse>): void {
 function getNotionDescriptionProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
-  const richTextObject = map.get('Description').rich_text as Array<any>;
+  const richTextObject = map.get('Description').rich_text[0] as object;
   console.log(richTextObject);
-  if (richTextObject.length === 0) {
+  if (!richTextObject) {
     return '';
   }
-  return objectToMap(objectToMap(richTextObject).get('0')).get('plain_text');
+  return objectToMap(richTextObject).get('plain_text');
 }
 
 // getNotionDueProperty return notions due
