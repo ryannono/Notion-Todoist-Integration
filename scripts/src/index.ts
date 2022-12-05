@@ -21,16 +21,18 @@ const notionApi: Client = new Client({auth: notionKey});
 // ------------ General helper function ---------------------- //
 
 // objectToMap takes in any object and returns it in a map format
-function objectToMap(object: any): Map<any, any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function objectToMap(object: object): Map<string, any> {
   // start a new map
   const map = new Map();
 
-  // get the (passed) object's keys
+  // get the (passed) object's keys and values
   const keys = Object.keys(object);
+  const values = Object.values(object);
 
   // map each key to the value in the object
   for (let i = 0; i < keys.length; i++) {
-    map.set(keys[i], object[keys[i]]);
+    map.set(keys[i], values[i]);
   }
 
   return map;
