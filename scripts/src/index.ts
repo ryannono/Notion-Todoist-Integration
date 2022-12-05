@@ -557,8 +557,6 @@ async function checkNotionIncompletion(
 async function notionUpToDateCheck(
   lastCheckedTodoistIndex: number
 ): Promise<number> {
-  //console.log(lastCheckedTodoistIndex);
-
   // get list of todoist *active tasks
   const taskList: Array<Task> = await todoistApi.getTasks();
 

@@ -6,3 +6,8 @@
 
 # vs code files
 .vscode
+
+# eslint
+.eslint
+
+.editorconfig
