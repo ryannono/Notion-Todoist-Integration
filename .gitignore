@@ -10,4 +10,5 @@
 # eslint
 .eslint*
 
+# editor configuration
 .editorconfig
