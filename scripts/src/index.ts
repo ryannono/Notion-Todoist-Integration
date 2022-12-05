@@ -4,8 +4,6 @@ import {Client} from '@notionhq/client'; // notion api
 import {
   PageObjectResponse,
   QueryDatabaseResponse,
-  RichTextItemResponse,
-  RichTextPropertyItemObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 
 // ------------------- auth keys ------------------------------//
