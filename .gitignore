@@ -9,6 +9,7 @@
 
 # eslint
 .eslint*
+.prettier*
 
 # editor configuration
 .editorconfig
