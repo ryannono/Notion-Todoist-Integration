@@ -68,7 +68,6 @@ function getNotionDescriptionProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
   const richTextObject = map.get('Description').rich_text[0] as object;
-  console.log(richTextObject);
   if (!richTextObject) {
     return '';
   }
@@ -109,11 +108,11 @@ function getNotionTodoistIDProperty(pageObject: PageObjectResponse): string {
 function getNotionTodoistURLProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
-  const richTextObject = map.get('URL').rich_text as Array<any>;
-  if (richTextObject.length === 0) {
+  const richTextObject = map.get('URL').rich_text[0] as object;
+  if (!richTextObject) {
     return '';
   }
-  return objectToMap(objectToMap(richTextObject).get('0')).get('plain_text');
+  return objectToMap(richTextObject).get('plain_text');
 }
 
 // getNotionTitleProperty return notions title
@@ -121,8 +120,8 @@ function getNotionTodoistURLProperty(pageObject: PageObjectResponse): string {
 function getNotionTitleProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
-  const titleobject = map.get('Task').title as object;
-  return objectToMap(objectToMap(titleobject).get('0')).get('plain_text');
+  const titleobject = map.get('Task').title[0] as object;
+  return objectToMap(titleobject).get('plain_text');
 }
 
 // ----------------- API query/search functions -------------------- //
