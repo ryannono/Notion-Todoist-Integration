@@ -21,8 +21,9 @@ const notionApi = new client_1.Client({ auth: notionKey });
 function objectToMap(object) {
     const map = new Map();
     const keys = Object.keys(object);
+    const values = Object.values(object);
     for (let i = 0; i < keys.length; i++) {
-        map.set(keys[i], object[keys[i]]);
+        map.set(keys[i], values[i]);
     }
     return map;
 }
