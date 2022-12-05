@@ -46,12 +46,11 @@ function bubbleSortTaskList(taskList) {
 function getNotionDescriptionProperty(pageObject) {
     const propertiesObject = pageObject.properties;
     const map = objectToMap(propertiesObject);
-    const richTextObject = map.get('Description').rich_text;
-    console.log(richTextObject);
-    if (richTextObject.length === 0) {
+    const richTextObject = map.get('Description').rich_text[0];
+    if (!richTextObject) {
         return '';
     }
-    return objectToMap(objectToMap(richTextObject).get('0')).get('plain_text');
+    return objectToMap(richTextObject).get('plain_text');
 }
 function getNotionDueProperty(pageObject) {
     const propertiesObject = pageObject.properties;
@@ -76,17 +75,17 @@ function getNotionTodoistIDProperty(pageObject) {
 function getNotionTodoistURLProperty(pageObject) {
     const propertiesObject = pageObject.properties;
     const map = objectToMap(propertiesObject);
-    const richTextObject = map.get('URL').rich_text;
-    if (richTextObject.length === 0) {
+    const richTextObject = map.get('URL').rich_text[0];
+    if (!richTextObject) {
         return '';
     }
-    return objectToMap(objectToMap(richTextObject).get('0')).get('plain_text');
+    return objectToMap(richTextObject).get('plain_text');
 }
 function getNotionTitleProperty(pageObject) {
     const propertiesObject = pageObject.properties;
     const map = objectToMap(propertiesObject);
-    const titleobject = map.get('Task').title;
-    return objectToMap(objectToMap(titleobject).get('0')).get('plain_text');
+    const titleobject = map.get('Task').title[0];
+    return objectToMap(titleobject).get('plain_text');
 }
 function IDSearchNotion(todoistID) {
     return __awaiter(this, void 0, void 0, function* () {
