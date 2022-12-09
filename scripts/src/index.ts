@@ -20,8 +20,11 @@ const notionApi: Client = new Client({auth: notionKey});
 
 // ------------ General helper function ---------------------- //
 
-// objectToMap takes in any object and returns it in a map format
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * It takes an object and returns a Map with the same keys and values
+ * @param {object} object - the object to convert to a map
+ * @returns A map with the keys and values of the passed object.
+ */
 function objectToMap(object: object): Map<string, any> {
   // start a new map
   const map = new Map();
@@ -38,8 +41,10 @@ function objectToMap(object: object): Map<string, any> {
   return map;
 }
 
-// bubbleSortTaskList sorts a notion page object
-// array by the time tasks were created
+/**
+ * It takes an array of tasks, and sorts them by their creation time
+ * @param taskList - Array<PageObjectResponse>
+ */
 function bubbleSortTaskList(taskList: Array<PageObjectResponse>): void {
   let swapCounter = -1;
 
@@ -64,8 +69,12 @@ function bubbleSortTaskList(taskList: Array<PageObjectResponse>): void {
 
 // ------------ Get Notion Property functions ----------------- //
 
-// getNotionDescriptionProperty return notions description
-// property for the passed page
+/**
+ * It takes a page object from the Notion API, and returns the description property of the page as a string
+ * @param {PageObjectResponse} pageObject - This is the object that Notion returns when you make a
+ * request to get a page.
+ * @returns A string (notion's description prop)
+ */
 function getNotionDescriptionProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
@@ -76,8 +85,12 @@ function getNotionDescriptionProperty(pageObject: PageObjectResponse): string {
   return objectToMap(richTextObject).get('plain_text');
 }
 
-// getNotionDueProperty return notions due
-// property for the passed page
+/**
+ * It takes a page object from the Notion API, and returns the due date of the page as a string
+ * @param {PageObjectResponse} pageObject - This is the object that Notion returns when you query a
+ * page.
+ * @returns A string
+ */
 function getNotionDueProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
@@ -90,14 +103,23 @@ function getNotionDueProperty(pageObject: PageObjectResponse): string {
 
 // getNotionStatusProperty return notions status
 // property for the passed page
+/**
+ * It takes a page object from the Notion API, and returns the Status property (as a boolean)
+ * of the page as a string and returns the value
+ * @param {PageObjectResponse} pageObject - This is the object that is returned from the Notion API.
+ * @returns A boolean value.
+ */
 function getNotionStatusProperty(pageObject: PageObjectResponse): boolean {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
   return map.get('Status').checkbox as boolean;
 }
 
-// getNotionTodoistIDProperty return notions TodoistID
-// property for the passed page
+/**
+ * It takes a PageObjectResponse object and returns the TodoistID property as a string
+ * @param {PageObjectResponse} pageObject - PageObjectResponse
+ * @returns A string
+ */
 function getNotionTodoistIDProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
@@ -105,8 +127,11 @@ function getNotionTodoistIDProperty(pageObject: PageObjectResponse): string {
   return !number ? '' : String(number);
 }
 
-// getNotionTodoistURLProperty return notions URL
-// property for the passed page
+/**
+ * It takes a page object from the Notion API and returns the URL property of the page
+ * @param {PageObjectResponse} pageObject - This is the object that is returned from the Notion API.
+ * @returns A string
+ */
 function getNotionTodoistURLProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
@@ -117,8 +142,11 @@ function getNotionTodoistURLProperty(pageObject: PageObjectResponse): string {
   return objectToMap(richTextObject).get('plain_text');
 }
 
-// getNotionTitleProperty return notions title
-// property for the passed page
+/**
+ * It takes a page object from the Notion API and returns the title of the page
+ * @param {PageObjectResponse} pageObject - This is the object that is returned from the Notion API.
+ * @returns A string
+ */
 function getNotionTitleProperty(pageObject: PageObjectResponse): string {
   const propertiesObject = pageObject.properties as object;
   const map = objectToMap(propertiesObject);
@@ -128,8 +156,11 @@ function getNotionTitleProperty(pageObject: PageObjectResponse): string {
 
 // ----------------- API query/search functions -------------------- //
 
-// searchNotion queries the notion database for a todoist ID and returns
-// the matching page object
+/**
+ * It takes a Todoist ID and returns the Notion page that has that ID
+ * @param {number} todoistID - number - The ID of the Todoist task
+ * @returns A promise that resolves to a PageObjectResponse or null
+ */
 async function IDSearchNotion(
   todoistID: number
 ): Promise<PageObjectResponse | null> {
@@ -154,7 +185,10 @@ async function IDSearchNotion(
   return searchResults.results[0] as PageObjectResponse;
 }
 
-// notionActivePages returns a list of the active tasks in notion
+/**
+ * It queries the database for active pages (where the Status property is set to false)
+ * @returns An array of PageObjectResponse objects.
+ */
 async function notionActivePages(): Promise<PageObjectResponse[]> {
   const queryResponse: QueryDatabaseResponse = await notionApi.databases.query({
     database_id: databaseId,
@@ -169,8 +203,11 @@ async function notionActivePages(): Promise<PageObjectResponse[]> {
   return queryResponse.results as Array<PageObjectResponse>;
 }
 
-// notionNeedsUpdatePages returns a list of the tasks
-// with the "needs update" sync status in notion
+/**
+ * It queries the database for all pages that have a property called "Sync status" with a value of
+ * "NeedsUpdate"
+ * @returns An array of PageObjectResponse objects.
+ */
 async function notionNeedsUpdatePages(): Promise<PageObjectResponse[]> {
   const queryResponse: QueryDatabaseResponse = await notionApi.databases.query({
     database_id: databaseId,
@@ -187,9 +224,11 @@ async function notionNeedsUpdatePages(): Promise<PageObjectResponse[]> {
 
 // --------------- Task/Page creation & update functions --------------//
 
-// newNotionPage creates a new page in the notion
-// database matching the values in the todoist task
-// and returns the new page object
+/**
+ * It creates a new Notion page with the same properties as the Todoist task
+ * @param {Task} todoistTask - Task - This is the task object from Todoist.
+ * @returns A promise that resolves to a PageObjectResponse
+ */
 async function newNotionPage(todoistTask: Task): Promise<PageObjectResponse> {
   // If a due date exists create a new page with a
   // due date if not create a page without one
@@ -253,9 +292,13 @@ async function newNotionPage(todoistTask: Task): Promise<PageObjectResponse> {
   return newNotionPage;
 }
 
-// updateNotionPage updates a page in the notion
-// database to match the passed todoist task
-// and returns the page object
+/**
+ * It takes a notion page ID and a todoist task and updates the notion page with the todoist task's
+ * information
+ * @param {string} notionPageID - The ID of the Notion page you want to update
+ * @param {Task} todoistTask - Task - This is the task object from Todoist
+ * @returns A promise that resolves to a PageObjectResponse
+ */
 async function updateNotionPage(
   notionPageID: string,
   todoistTask: Task
@@ -318,8 +361,13 @@ async function updateNotionPage(
   return updatedNotionPage as PageObjectResponse;
 }
 
-// newTodoistTask creates a new todoist task with
-// all the notion values and returns the task
+/**
+ * It takes a Notion page object, extracts the title, description, and due date, and then creates a new
+ * Todoist task with that information
+ * @param {PageObjectResponse} notionPageObject - This is the object that Notion returns when you make
+ * a request to the API.
+ * @returns A promise that resolves to a Task object.
+ */
 async function newTodoistTask(
   notionPageObject: PageObjectResponse
 ): Promise<Task> {
@@ -334,8 +382,14 @@ async function newTodoistTask(
   });
 }
 
-// updateTodoistTask updates a todoist task with
-// all the notion values and returns the updated task
+/**
+ * It takes a task ID and a Notion page object, and updates the Todoist task matching
+ * the passed ID withe the notion page information
+ * @param {string} taskID - The ID of the Todoist task to update.
+ * @param {PageObjectResponse} notionPageObject - This is the object that we get back from the Notion
+ * API when we call getPageObject.
+ * @returns A promise that resolves to a Task object.
+ */
 async function updateTodoistTask(
   taskID: string,
   notionPageObject: PageObjectResponse
@@ -353,8 +407,13 @@ async function updateTodoistTask(
 
 // -------------- Structure (query/search/store) functions ------------//
 
-// myTodoistIndexOf returns the index of the passed
-// todoist ID in the ID.todoistTaskIDs array
+/**
+ * If the todoistID is in the array, return the index of the todoistID in the array. If the todoistID
+ * is not in the array, add the todoistID to the array and return the index of the todoistID in the
+ * array.
+ * @param {string} todoistID - The ID of the task in Todoist.
+ * @returns The index of the todoistID in the IDs.todoistTaskIDs array.
+ */
 function myTodoistIndexOf(todoistID: string): number {
   let index: number;
 
@@ -368,8 +427,13 @@ function myTodoistIndexOf(todoistID: string): number {
   return index;
 }
 
-// myNotionIndexOf returns the index of the passed
-// notion page ID in the ID.notionPageIDs array
+/**
+ * It takes a Notion page ID as a string, and returns the index of that page ID in the
+ * `IDs.notionPageIDs` array. If the page ID is not in the array, it adds it to the array and returns
+ * the index of the new page ID
+ * @param {string} notionpageID - The ID of the Notion page you want to get the index of.
+ * @returns The index of the notionpageID in the IDs.notionPageIDs array.
+ */
 function myNotionIndexOf(notionpageID: string): number {
   let index: number;
 
@@ -383,8 +447,12 @@ function myNotionIndexOf(notionpageID: string): number {
   return index;
 }
 
-// storeCurrentSyncedTasks stores the ids of all the currently active
-// tasks in todoIst and there notion counterparts
+/**
+ * It takes the list of active tasks from Todoist stores the id in "IDs.todoistTaskIDs",
+ * and then searches for the corresponding Notion page for each task. If a matching page
+ * exists the id of the notion page is stored in "IDs.notionPageIDs" at the same index
+ * as its todoist counterpart
+ */
 async function storeCurrentSyncedTasks(): Promise<void> {
   const todoistTaskList = await todoistApi.getTasks();
   const len: number = todoistTaskList.length;
@@ -404,8 +472,10 @@ async function storeCurrentSyncedTasks(): Promise<void> {
   }
 }
 
-// bubbleSortIDs ensures the IDS strored int eh structure are in
-// the same order they were create
+/**
+ * It sorts the arrays of Todoist task IDs and Notion page IDs by the creation date of the Todoist
+ * tasks
+ */
 async function bubbleSortIDs(): Promise<void> {
   let swapCounter = -1;
   const len: number = IDs.todoistTaskIDs.length;
@@ -440,10 +510,15 @@ async function bubbleSortIDs(): Promise<void> {
 
 // -------------- Notion <-> Todoist auto sync functions ----------------//
 
-// checkTodoistCompletion check if any of the seen
-// todoist ids have recently been completed in todoist
-// if they have then the status in notion is updated to match
-// the function then returns the last index it checked/updated
+/**
+ * It checks if the last checked Todoist task is the last task in the list, and if it is, it checks if
+ * any of the tasks in the list have been completed since the last check. If they have, it updates the
+ * corresponding Notion page
+ * @param {number} lastCheckedTodoistIndex - The index of the last task that was checked for
+ * completion.
+ * @param taskList - Array<Task> - this is the list of tasks that we get from Notion.
+ * @returns The lastCheckedTodoistIndex is being returned.
+ */
 async function checkTodoistCompletion(
   lastCheckedTodoistIndex: number,
   taskList: Array<Task>
@@ -466,10 +541,12 @@ async function checkTodoistCompletion(
   return lastCheckedTodoistIndex;
 }
 
-// checkTodoistCompletion check if any of the seen
-// todoist ids have recently been "un"-completed in todoist
-// if they have then the status in notion is updated to match
-// the function then returns the last index it checked/updated
+/**
+ * It takes a list of *active tasks from Todoist, and for each task, it checks if the corresponding
+ * Notion page is active (status property is false). If it is not active, it updates the Notion page
+ * with the latest information from Todoist to set notion page as active
+ * @param taskList - Array<Task>
+ */
 async function checkTodoistIncompletion(taskList: Array<Task>): Promise<void> {
   const len = taskList.length;
   for (let i = 0; i < len; i++) {
@@ -491,10 +568,14 @@ async function checkTodoistIncompletion(taskList: Array<Task>): Promise<void> {
   }
 }
 
-// checkNotionCompletion checks if any of the seen
-// todoist ids have recently been completed in notion
-// if they have then the status in todoist is updated to match
-// the function then returns the last index it checked/updated
+/**
+ * It checks if the last checked Notion index is greater than the length of the task list,
+ * if so then something was completed, and it updates(completes/closes) the matching todoist task to match
+ * @param {number} lastCheckedNotiontIndex - The index of the last Notion task that was checked for
+ * completion.
+ * @param taskList - Array<PageObjectResponse>
+ * @returns The lastCheckedNotionIndex
+ */
 async function checkNotionCompletion(
   lastCheckedNotiontIndex: number,
   taskList: Array<PageObjectResponse>
@@ -520,10 +601,11 @@ async function checkNotionCompletion(
   return lastCheckedNotiontIndex;
 }
 
-// checkNotionIncompletion check if any of the seen
-// todoist ids have recently been "un"-completed in notion
-// if they have then the status in todoist is updated to match
-// the function then returns the last index it checked/updated
+/**
+ * If a task is marked as completed in Todoist, but not in Notion, then mark it as incomplete in
+ * Todoist
+ * @param taskList - Array<PageObjectResponse>
+ */
 async function checkNotionIncompletion(
   taskList: Array<PageObjectResponse>
 ): Promise<void> {
@@ -551,9 +633,12 @@ async function checkNotionIncompletion(
   }
 }
 
-// notionUpToDateCheck checks if notion has the latest
-// todoist tasks in its database. If it doesnt they are added.
-// the function returns the index of the last element it checked
+/**
+ * It checks if there are any new tasks in Todoist, if there are it creates a new page in Notion for
+ * each new task and adds the Notion page ID to the IDs structure
+ * @param {number} lastCheckedTodoistIndex - number - the index of the last checked Todoist task
+ * @returns The last checked index of the todoist task list
+ */
 async function notionUpToDateCheck(
   lastCheckedTodoistIndex: number
 ): Promise<number> {
@@ -596,11 +681,12 @@ async function notionUpToDateCheck(
   return taskListLength - 1;
 }
 
-// notionUpToDateCheck checks if notion has the latest
-// todoist tasks in its database. If it doesnt they are added.
-// The funtion also adds todoist's ID information on to the
-// notion database once the new task is created.
-// the function returns the index of the last element it checked
+/**
+ * It checks if the Notion page has been synced to Todoist yet. If it hasn't, it creates a new Todoist
+ * task and updates the Notion page with the Todoist task's ID and URL
+ * @param {number} lastCheckedNotionIndex - the index of the last notion task that was checked
+ * @returns The index of the last checked notion page
+ */
 async function todoistUpToDateCheck(lastCheckedNotionIndex: number) {
   console.log(lastCheckedNotionIndex);
 
@@ -653,7 +739,11 @@ async function todoistUpToDateCheck(lastCheckedNotionIndex: number) {
 
 // ------------- Notion <-> Todoist manual sync functions --------------//
 
-// swapNotionSyncStatus swap the sync status from the passed page
+/**
+ * It takes a Notion page ID as an argument, and then updates the "Sync status" property of that page
+ * to "Updated"
+ * @param {string} notionPageID - The ID of the Notion page you want to update.
+ */
 async function swapNotionSyncStatus(notionPageID: string): Promise<void> {
   await notionApi.pages.update({
     page_id: notionPageID,
@@ -667,8 +757,10 @@ async function swapNotionSyncStatus(notionPageID: string): Promise<void> {
   });
 }
 
-// notionManualUpdates updates all the pages that were manually
-// queued (by setting them to "Needs update") for update from within notion
+/**
+ * It searches for tasks that need to be updated, and if any are found, it updates them and then swaps
+ * their update indicator
+ */
 async function notionManualUpdates(): Promise<void> {
   // search for tasks identified to need to be updated
   const pageList =
@@ -698,8 +790,10 @@ async function notionManualUpdates(): Promise<void> {
   }
 }
 
-// notionManualUpdates updates all the pages that were manually
-// queued (by setting them to "Priority 3") for update from within todoist
+/**
+ * It gets a list of all priority 3 tasks from Todoist, then iterates through them, finds the matching
+ * Notion page, and updates it
+ */
 async function todoistManualUpdates(): Promise<void> {
   // get priority 3 task list from todoist
   const taskList = (await todoistApi.getTasks({filter: 'p3'})) as Array<Task>;
@@ -729,8 +823,11 @@ async function todoistManualUpdates(): Promise<void> {
 
 // ---------------------- Automation/Sync interval -------------------------//
 
-// intervalStart Starts am interval at which notion and todoist
-// will be checked and synced
+/**
+ * Every 10 seconds, check if the latest todoist index is the same as the previous latest todoist index, if not,
+ * update notion. Then, check if the latest notion index is the same as the previous latest notion index, if
+ * not, update todoist
+ */
 async function intervalStart() {
   let latestNotionIndex = -1;
   let latestTodoistIndex = -1;
@@ -748,9 +845,12 @@ async function intervalStart() {
 
 // ----------------------------- Main ---------------------------------//
 
+/* Creating an object called IDs that has two properties: todoistTaskIDs and notionPageIDs. Each of
+these properties is an array of strings. */
 const IDs = {
   todoistTaskIDs: [''],
   notionPageIDs: [''],
 };
 
+/* Calling the storeCurrentSyncedTasks function and then calling the intervalStart function. */
 storeCurrentSyncedTasks().then(intervalStart);
